@@ -24,7 +24,7 @@
       Se il repo si chiama "tds-panel", l'URL sarà:
       https://USERNAME.github.io/tds-panel/taskpane.html
     -->
-    <SourceLocation DefaultValue="https://USERNAME.github.io/tds-panel/taskpane.html" />
+    <SourceLocation DefaultValue="https://uliog.github.io/Wdai/taskpane.html" />
   </DefaultSettings>
 
   <Permissions>ReadWriteDocument</Permissions>
@@ -62,7 +62,7 @@
 
     <Resources>
       <bt:Urls>
-        <bt:Url id="TaskpaneUrl" DefaultValue="https://USERNAME.github.io/tds-panel/taskpane.html" />
+        <bt:Url id="TaskpaneUrl" DefaultValue="https://uliog.github.io/Wdai/taskpane.html" />
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="TdS" />
@@ -71,9 +71,9 @@
       </bt:ShortStrings>
       <bt:Images>
         <!-- Icone placeholder — puoi sostituirle con icone DAI -->
-        <bt:Image id="Icon16" DefaultValue="https://USERNAME.github.io/tds-panel/icon-16.png" />
-        <bt:Image id="Icon32" DefaultValue="https://USERNAME.github.io/tds-panel/icon-32.png" />
-        <bt:Image id="Icon80" DefaultValue="https://USERNAME.github.io/tds-panel/icon-80.png" />
+        <bt:Image id="Icon16" DefaultValue="https://uliog.github.io/Wdai/icon-16.png" />
+        <bt:Image id="Icon32" DefaultValue="https://uliog.github.io/Wdai/icon-32.png" />
+        <bt:Image id="Icon80" DefaultValue="https://uliog.github.io/Wdai/icon-80.png" />
       </bt:Images>
     </Resources>
   </VersionOverrides>
