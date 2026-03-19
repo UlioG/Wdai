@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>TdS</title>
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+  :root {
+    --bg: #111;
+    --s1: #1a1a1a;
+    --s2: #252525;
+    --acc: #e94560;
+    --ok: #4ecdc4;
+    --tx: #eee;
+    --tx2: #888;
+    --r: 10px;
+  }
+  * { margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent; }
+  html,body {
+    font-family:'DM Sans',-apple-system,sans-serif;
+    background:var(--bg);color:var(--tx);
+    font-size:14px;-webkit-user-select:none;user-select:none;
+  }
+
+  #status{background:var(--ok);color:#000;font-size:11px;font-weight:600;text-align:center;padding:3px;display:none}
+  #status.show{display:block}
+  #status.err{background:var(--acc);color:#fff}
+
+  .sec{padding:6px 8px 2px;font-size:10px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px}
+  .row{display:flex;flex-wrap:wrap;gap:5px;padding:3px 8px}
+
+  .b{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:11px 10px;
+    background:var(--s2);border-radius:var(--r);
+    font-size:13px;font-weight:500;
+    cursor:pointer;border:1px solid rgba(255,255,255,.05);
+    transition:transform .1s,background .15s;
+    min-width:0;
+  }
+  .b:active{transform:scale(.93);background:var(--acc)}
+
+  .b.ndr{background:rgba(78,205,196,.15);border-color:rgba(78,205,196,.25);color:var(--ok)}
+  .b.ndr:active{background:var(--ok);color:#000}
+
+  .b.wide{flex:1;min-width:60px}
+  .b.dest{background:var(--s1);font-size:12px;padding:9px 8px}
+
+  .sep{height:1px;background:rgba(255,255,255,.06);margin:4px 8px}
+
+  @keyframes fl{0%{background:var(--ok)}100%{background:var(--s2)}}
+  .b.fl{animation:fl .35s ease}
+  @keyframes fln{0%{background:var(--ok)}100%{background:rgba(78,205,196,.15)}}
+  .b.ndr.fl{animation:fln .35s ease}
+</style>
+</head>
+<body>
+
+<div id="status"></div>
+
+<div class="sec">Struttura vano</div>
+<div class="row">
+  <div class="b wide" data-t="VANO ">VANO</div>
+  <div class="b wide" data-t="Parete ">Parete</div>
+  <div class="b wide" data-t="Soffitto ">Soffitto</div>
+  <div class="b wide" data-t="Pavimento ">Pavimento</div>
+</div>
+<div class="row">
+  <div class="b wide" data-t="Finestra ">Finestra</div>
+  <div class="b wide" data-t="Portafinestra ">Portafin.</div>
+  <div class="b wide" data-t="Porta ">Porta</div>
+</div>
+
+<div class="sep"></div>
+
+<div class="sec">Difetti</div>
+<div class="row">
+  <div class="b wide" data-t="filatura ">Filatura</div>
+  <div class="b wide" data-t="lesione ">Lesione</div>
+  <div class="b wide" data-t="microlesione ">Microles.</div>
+</div>
+
+<div class="sep"></div>
+
+<div class="sec">Direzione</div>
+<div class="row">
+  <div class="b wide" data-t="vt ">VT</div>
+  <div class="b wide" data-t="oz ">OZ</div>
+  <div class="b wide" data-t="dg ">DG</div>
+  <div class="b wide" data-t="C/S">C/S</div>
+</div>
+
+<div class="sep"></div>
+
+<div class="sec">Chiusure</div>
+<div class="row">
+  <div class="b ndr wide" data-t="NDR" style="font-weight:600;font-size:15px">NDR</div>
+  <div class="b ndr wide" data-t="NDR per i restanti elementi">NDR rest.</div>
+</div>
+
+<div class="sep"></div>
+
+<div class="sec">Destinazione vano</div>
+<div class="row">
+  <div class="b dest" data-t="Camera">Camera</div>
+  <div class="b dest" data-t="Soggiorno">Soggiorno</div>
+  <div class="b dest" data-t="Bagno">Bagno</div>
+  <div class="b dest" data-t="Corridoio">Corridoio</div>
+  <div class="b dest" data-t="Ripostiglio">Ripost.</div>
+</div>
+
+<div class="sep"></div>
+
+<div class="sec">Punteggiatura</div>
+<div class="row">
+  <div class="b wide" data-t=";">;</div>
+  <div class="b wide" data-t=", ">,</div>
+  <div class="b wide" data-t=": ">:</div>
+  <div class="b wide" data-t="&#10;">&#8629;</div>
+</div>
+
+<script>
+  let officeOk=false;
+
+  Office.onReady(function(info){
+    if(info.host===Office.HostType.Word){
+      officeOk=true;
+      msg('Connesso',false);
+      setTimeout(hide,1500);
+    }
+  });
+  setTimeout(function(){if(!officeOk)msg('Clipboard mode',true)},4000);
+
+  function ins(text){
+    if(!officeOk){
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(()=>msg('Copiato',false)).catch(()=>fb(text));
+      }else fb(text);
+      setTimeout(hide,800);
+      return;
+    }
+    Word.run(function(ctx){
+      var sel=ctx.document.getSelection();
+      sel.insertText(text,Word.InsertLocation.end);
+      return ctx.sync();
+    }).catch(function(){
+      if(navigator.clipboard)navigator.clipboard.writeText(text);
+      msg('Clipboard',true);setTimeout(hide,1000);
+    });
+  }
+
+  function fb(t){
+    var a=document.createElement('textarea');a.value=t;
+    a.style.cssText='position:fixed;left:-9999px';
+    document.body.appendChild(a);a.select();
+    document.execCommand('copy');document.body.removeChild(a);
+    msg('Copiato',false);
+  }
+
+  function msg(m,e){
+    var s=document.getElementById('status');
+    s.textContent=m;s.className=e?'show err':'show';
+  }
+  function hide(){document.getElementById('status').className=''}
+
+  document.querySelectorAll('.b').forEach(function(b){
+    b.addEventListener('click',function(){
+      ins(this.dataset.t);
+      this.classList.add('fl');
+      var el=this;setTimeout(function(){el.classList.remove('fl')},350);
+    });
+  });
+</script>
+</body>
+</html>
